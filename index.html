@@ -200,6 +200,7 @@
     }
     .figure-block { margin-bottom: 18px; }
     .caption { color: var(--muted); text-align: center; max-width: 850px; margin: 10px auto 0; }
+    .caption.large { font-size: 1.08rem; line-height: 1.55; }
     .grid { display: grid; gap: 18px; }
     .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -272,7 +273,7 @@
         <a class="button secondary" href="#videos">Videos</a>
       </div>
       <div class="todo">
-        TODO: replace the arXiv, code, project URL, and PDF paths after the final links are available.
+        TODO: replace the arXiv, code after the final links are available. 
       </div>
     </div>
   </header>
@@ -281,18 +282,9 @@
     <section>
       <div class="container">
         <img src="static/images/4_hardwaredemo.png" alt="Hardware demo">
-        <p class="caption">
-          DREAM-Chunk reactively switches among sampled action chunks by matching the observed rollout to predicted latent world-model rollouts, improving robustness when open-loop chunk execution becomes unreliable.
+        <p class="caption large">
+          <strong>The sources of stochasticity in manipulation:</strong> hardware imprecision from motor limitations, partial observability of object velocity or occluded scene state, and external perturbations, especially during human-robot interaction. These uncertainties make open-loop action chunking brittle.
         </p>
-      </div>
-    </section>
-
-    <section>
-      <div class="container">
-        <h2>System Diagram</h2>
-        <object class="pdf-embed" data="static/images/DreamChunk_systemdiagram.pdf" type="application/pdf">
-          <a href="static/images/DreamChunk_systemdiagram.pdf">View system diagram</a>
-        </object>
       </div>
     </section>
 
@@ -309,8 +301,9 @@
       <div class="container">
         <h2>Method Overview</h2>
         <p class="lead">
-          Instead of committing to a single open-loop action chunk, DREAM-Chunk keeps multiple candidate chunks alive and uses latent-state matching to decide which chunk to follow at each execution phase.
+          Instead of committing to a single open-loop action chunk, DREAM-Chunk infers multiple candidate chunks and uses latent-state matching to decide which chunk to follow at each execution phase.
         </p>
+        <img src="static/images/DreamChunk_systemdiagram.png" alt="DREAM-Chunk system diagram">
         <div class="grid three">
           <div class="card">
             <h3>1. Sample candidate chunks</h3>
@@ -394,7 +387,7 @@
           </div>
           <div class="card">
             <div class="metric">Hardware</div>
-            <p>The method improves success rates across real manipulation tasks on SO-101 and Franka platforms.</p>
+            <p>The method improves success rates across real manipulation tasks on SO-101 and Franka platforms. World-model encoding, prediction, and latent matching remain at the millisecond level.</p>
           </div>
         </div>
         <div class="grid two" style="margin-top: 18px;">
@@ -406,7 +399,7 @@
           </div>
           <div class="card">
             <h3>Franka with π0.5</h3>
-            <p><strong>Can insertion:</strong> 10% local open-loop → 65% local DREAM-Chunk with N = 5. World-model encoding, prediction, and latent matching remain at the millisecond level.</p>
+            <p><strong>Can insertion:</strong> 10% local open-loop → 65% local DREAM-Chunk with N = 5. Under remote inference latency of 1s+, DREAM-Chunk with N = 10, 15 still outperform local baseline, achieves 30% success rate.</p>
           </div>
         </div>
       </div>
@@ -429,13 +422,7 @@
     <section class="alt">
       <div class="container">
         <h2>BibTeX</h2>
-        <pre><code>@article{chen2026dreamchunk,
-  title={DREAM-Chunk: Reactive Chunk Selection Through Matching Latent World-Model Rollouts},
-  author={Chen, Wenxi and Zhang, Kaidi and Lin, Chi and Zhang, Zhiyuan and She, Yu and Liu, Yuejiang and Yeh, Raymond A. and Mou, Shaoshuai and Gu, Yan},
-  journal={Preprint},
-  year={2026},
-  url={https://your-project-page.github.io/}
-}</code></pre>
+        <pre><code>Preprint to be released soon.</code></pre>
       </div>
     </section>
   </main>
