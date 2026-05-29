@@ -108,9 +108,9 @@
       margin-bottom: 18px;
     }
     h1 {
-      font-size: clamp(2.1rem, 5vw, 4.2rem);
-      line-height: 1.08;
-      letter-spacing: -0.05em;
+      font-size: clamp(1.45rem, 3vw, 2.45rem);
+      line-height: 1.18;
+      letter-spacing: 0;
       margin: 0 auto 20px;
       max-width: 980px;
     }
@@ -186,11 +186,24 @@
       margin: 0 auto 18px;
     }
     .video-placeholder code, .image-placeholder code { color: #364256; }
-    video, img { width: 100%; border-radius: 18px; border: 1px solid var(--line); background: #000; }
+    video, img, .pdf-embed {
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      display: block;
+    }
+    video { background: #000; }
+    .pdf-embed {
+      min-height: 520px;
+      aspect-ratio: 16 / 9;
+    }
+    .figure-block { margin-bottom: 18px; }
     .caption { color: var(--muted); text-align: center; max-width: 850px; margin: 10px auto 0; }
     .grid { display: grid; gap: 18px; }
     .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .simulation-grid { grid-template-columns: minmax(0, 6.5fr) minmax(0, 3.5fr); align-items: center; }
     .card {
       background: var(--card);
       border: 1px solid var(--line);
@@ -232,9 +245,10 @@
       text-align: center;
     }
     @media (max-width: 760px) {
-      .grid.two, .grid.three { grid-template-columns: 1fr; }
+      .grid.two, .grid.three, .simulation-grid { grid-template-columns: 1fr; }
       section { padding: 42px 0; }
       .hero { padding-top: 54px; }
+      .pdf-embed { min-height: 360px; }
     }
   </style>
 </head>
@@ -243,9 +257,10 @@
   <header class="hero">
     <div class="container">
       <div class="tag">Preprint · Vision-Language-Action Models · World Models</div>
-      <h1>DREAM-Chunk: Reactive Chunk Selection Through Matching Latent World-Model Rollouts</h1>
+      <h1>DREAM-Chunk: Improve Reactivity of Open-loop Action Chunking with Latent World Model</h1>
       <div class="authors">
-        Wenxi Chen<sup>1</sup>, Kaidi Zhang<sup>1,†,*</sup>, Chi Lin<sup>1,†</sup>, Zhiyuan Zhang<sup>1</sup>, Yu She<sup>1</sup>, Yuejiang Liu<sup>2</sup>, Raymond A. Yeh<sup>1</sup>, Shaoshuai Mou<sup>1</sup>, Yan Gu<sup>1</sup>
+        Wenxi Chen<sup>1</sup>, Kaidi Zhang<sup>1,†,*</sup>, Chi Lin<sup>1,†</sup>, Zhiyuan Zhang<sup>1</sup>, <br />
+        Yu She<sup>1</sup>, Yuejiang Liu<sup>2</sup>, Raymond A. Yeh<sup>1</sup>, Shaoshuai Mou<sup>1</sup>, Yan Gu<sup>1</sup>
       </div>
       <div class="affiliations"><sup>1</sup>Purdue University &nbsp;&nbsp; <sup>2</sup>Stanford University</div>
       <div class="note"><sup>*</sup>Kaidi Zhang and Chi Lin made equal contributions to the experimental work.</div>
@@ -265,16 +280,19 @@
   <main>
     <section>
       <div class="container">
-        <div class="video-placeholder">
-          <div>
-            <strong>Teaser video placeholder</strong><br />
-            Replace this block with your main robot demo video, for example:<br />
-            <code>&lt;video controls muted loop playsinline&gt;&lt;source src="static/videos/teaser.mp4" type="video/mp4"&gt;&lt;/video&gt;</code>
-          </div>
-        </div>
+        <img src="static/images/4_hardwaredemo.png" alt="Hardware demo">
         <p class="caption">
           DREAM-Chunk reactively switches among sampled action chunks by matching the observed rollout to predicted latent world-model rollouts, improving robustness when open-loop chunk execution becomes unreliable.
         </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>System Diagram</h2>
+        <object class="pdf-embed" data="static/images/DreamChunk_systemdiagram.pdf" type="application/pdf">
+          <a href="static/images/DreamChunk_systemdiagram.pdf">View system diagram</a>
+        </object>
       </div>
     </section>
 
@@ -329,27 +347,34 @@
     <section id="videos">
       <div class="container">
         <h2>Robot Experiment Videos</h2>
-        <p class="lead">Replace the placeholders below with your hardware videos. The captions are already aligned with the four experiments described in the paper.</p>
         <div class="grid two">
           <div class="card">
-            <div class="video-placeholder"><strong>static/videos/usb_unplug_insert.mp4</strong></div>
-            <h3>Unplug and insert USB</h3>
-            <p>SO-101 unplugs a USB connector from one port and inserts it into another. DREAM-Chunk is designed to handle failures from limited motor precision, such as getting stuck or missing the port.</p>
+            <video controls muted loop playsinline preload="metadata">
+              <source src="static/videos/so101_insert_usb.mp4" type="video/mp4">
+            </video>
+            <h3>SO-101 insert USB</h3>
+            <p>SO-101 manipulates a USB connector and inserts it into the target port. DREAM-Chunk is designed to handle failures from limited motor precision, such as getting stuck or missing the port.</p>
           </div>
           <div class="card">
-            <div class="video-placeholder"><strong>static/videos/moving_object.mp4</strong></div>
-            <h3>Catch and place moving object</h3>
-            <p>SO-101 catches a rolling object and places it into a basket. The task tests robustness under uncertain object velocity and partial observability.</p>
+            <video controls muted loop playsinline preload="metadata">
+              <source src="static/videos/so101_grasp_moving_object.mp4" type="video/mp4">
+            </video>
+            <h3>SO-101 grasp moving object</h3>
+            <p>SO-101 grasps a moving object. The task tests robustness under uncertain object velocity and partial observability.</p>
           </div>
           <div class="card">
-            <div class="video-placeholder"><strong>static/videos/pick_insert_toy.mp4</strong></div>
-            <h3>Pick and insert object</h3>
-            <p>SO-101 picks a toy block and inserts it at the target location. The task evaluates recovery from grasp and placement errors.</p>
+            <video controls muted loop playsinline preload="metadata">
+              <source src="static/videos/so101_stack_toy.mp4" type="video/mp4">
+            </video>
+            <h3>SO-101 stack toy</h3>
+            <p>SO-101 picks and stacks a toy object. The task evaluates recovery from grasp and placement errors.</p>
           </div>
           <div class="card">
-            <div class="video-placeholder"><strong>static/videos/can_insert_perturbation.mp4</strong></div>
-            <h3>Insert can under perturbation</h3>
-            <p>Franka picks a can and inserts it into a target slot while the container is manually perturbed, testing whether reactive chunk selection can compensate for external changes.</p>
+            <video controls muted loop playsinline preload="metadata">
+              <source src="static/videos/panda_insert_can.mp4" type="video/mp4">
+            </video>
+            <h3>Panda insert can</h3>
+            <p>Panda picks a can and inserts it into a target slot while the scene can change, testing whether reactive chunk selection can compensate for execution errors and external changes.</p>
           </div>
         </div>
       </div>
@@ -389,11 +414,14 @@
 
     <section>
       <div class="container">
-        <h2>Figures and Images</h2>
-        <p class="lead">Add your method figure, simulation plots, and robot result images here later.</p>
-        <div class="grid two">
-          <div class="image-placeholder"><strong>static/images/method_overview.png</strong><br />Method overview / Figure 2 placeholder</div>
-          <div class="image-placeholder"><strong>static/images/hardware_tasks.png</strong><br />Hardware task montage / Figure 6 placeholder</div>
+        <h2>Kinetix Simulation Results</h2>
+        <div class="grid simulation-grid">
+          <div class="figure-block">
+            <img src="static/images/kinetix_actionnoise.png" alt="Kinetix action-noise simulation result">
+          </div>
+          <div class="figure-block">
+            <img src="static/images/dreamchunk_wm_arch_with_policyenc_random_avg_vs_horizon_bar.png" alt="World-model horizon simulation result">
+          </div>
         </div>
       </div>
     </section>
