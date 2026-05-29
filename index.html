@@ -213,6 +213,20 @@
       box-shadow: 0 8px 24px rgba(20, 35, 60, 0.05);
     }
     .card p { color: var(--muted); margin: 0; }
+    .method-step {
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    }
+    .method-step.active {
+      border-color: var(--accent);
+      background: #eef5ff;
+      box-shadow: 0 12px 30px rgba(61, 107, 255, 0.16);
+      transform: translateY(-2px);
+    }
+    .method-figure {
+      margin: 18px 0;
+      border-radius: 0;
+    }
     .metric {
       font-size: 2rem;
       font-weight: 800;
@@ -260,11 +274,10 @@
       <div class="tag">Preprint · Vision-Language-Action Models · World Models</div>
       <h1>DREAM-Chunk: Improve Reactivity of Open-loop Action Chunking with Latent World Model</h1>
       <div class="authors">
-        Wenxi Chen<sup>1</sup>, Kaidi Zhang<sup>1,†,*</sup>, Chi Lin<sup>1,†</sup>, Zhiyuan Zhang<sup>1</sup>, <br />
+        Wenxi Chen<sup>1</sup>, Kaidi Zhang<sup>1,†</sup>, Chi Lin<sup>1,†</sup>, Zhiyuan Zhang<sup>1</sup>, <br />
         Yu She<sup>1</sup>, Yuejiang Liu<sup>2</sup>, Raymond A. Yeh<sup>1</sup>, Shaoshuai Mou<sup>1</sup>, Yan Gu<sup>1</sup>
       </div>
       <div class="affiliations"><sup>1</sup>Purdue University &nbsp;&nbsp; <sup>2</sup>Stanford University</div>
-      <div class="note"><sup>*</sup>Kaidi Zhang and Chi Lin made equal contributions to the experimental work.</div>
 
       <div class="buttons">
         <a class="button" href="static/pdfs/dream_chunk.pdf" target="_blank">Paper</a>
@@ -300,20 +313,21 @@
     <section>
       <div class="container">
         <h2>Method Overview</h2>
-        <p class="lead">
-          Instead of committing to a single open-loop action chunk, DREAM-Chunk infers multiple candidate chunks and uses latent-state matching to decide which chunk to follow at each execution phase.
-        </p>
-        <img src="static/images/DreamChunk_systemdiagram.png" alt="DREAM-Chunk system diagram">
+        <div class="card method-step active" data-method-step data-image="static/images/system_diagram_motivation.png" data-alt="Motivation for reactive chunk selection">
+          <h3>Motivation</h3>
+          <p>Naive open-loop action chunk execution updates its decision only at the next policy inference, making it vulnerable to external perturbations that occur within a chunk.</p>
+        </div>
+        <img id="method-figure" class="method-figure" src="static/images/system_diagram_motivation.png" alt="Motivation for reactive chunk selection">
         <div class="grid three">
-          <div class="card">
+          <div class="card method-step" data-method-step data-image="static/images/system_diagram_1.png" data-alt="Sample candidate chunks">
             <h3>1. Sample candidate chunks</h3>
             <p>The fixed VLA policy samples multiple plausible future action chunks from the current observation.</p>
           </div>
-          <div class="card">
+          <div class="card method-step" data-method-step data-image="static/images/system_diagram_2.png" data-alt="Dream latent futures">
             <h3>2. Dream latent futures</h3>
             <p>A lightweight world model predicts the latent rollout induced by each candidate chunk.</p>
           </div>
-          <div class="card">
+          <div class="card method-step" data-method-step data-image="static/images/system_diagram_3.png" data-alt="Match and switch among chunks">
             <h3>3. Match and switch</h3>
             <p>During execution, the current observation is encoded and matched to the closest phase-aligned dreamed latent state.</p>
           </div>
@@ -432,5 +446,51 @@
       This page was adapted for DREAM-Chunk from an academic project-page style template. Replace placeholder links, images, videos, and the arXiv identifier before release.
     </div>
   </footer>
+  <script>
+    const methodSteps = Array.from(document.querySelectorAll('[data-method-step]'));
+    const methodFigure = document.getElementById('method-figure');
+    let activeMethodStep = 0;
+    let methodTimer;
+
+    function setMethodStep(index) {
+      if (!methodFigure || methodSteps.length === 0) return;
+      activeMethodStep = index;
+      methodSteps.forEach((step, stepIndex) => {
+        step.classList.toggle('active', stepIndex === index);
+      });
+      const step = methodSteps[index];
+      methodFigure.src = step.dataset.image;
+      methodFigure.alt = step.dataset.alt;
+    }
+
+    function startMethodAutoplay() {
+      stopMethodAutoplay();
+      methodTimer = window.setInterval(() => {
+        setMethodStep((activeMethodStep + 1) % methodSteps.length);
+      }, 2500);
+    }
+
+    function stopMethodAutoplay() {
+      if (methodTimer) window.clearInterval(methodTimer);
+    }
+
+    methodSteps.forEach((step, index) => {
+      step.addEventListener('mouseenter', () => {
+        stopMethodAutoplay();
+        setMethodStep(index);
+      });
+      step.addEventListener('mouseleave', startMethodAutoplay);
+      step.addEventListener('focus', () => {
+        stopMethodAutoplay();
+        setMethodStep(index);
+      });
+      step.addEventListener('blur', startMethodAutoplay);
+      step.addEventListener('click', () => setMethodStep(index));
+      step.tabIndex = 0;
+    });
+
+    setMethodStep(0);
+    startMethodAutoplay();
+  </script>
 </body>
 </html>
